@@ -197,7 +197,9 @@ async def _mirror_leech(client, message, isQbit=False, isLeech=False, sameDir=No
             await sendMessage(message, f'<b>ERROR:</b> <i>{e}</i>')
             await delete_links(message)
             return
-
+    
+    bool_torrent = False
+    
     if reply_to:
         file_ = getattr(reply_to, reply_to.media.value) if reply_to.media else None
         if file_ is None and reply_to.text:
@@ -207,6 +209,7 @@ async def _mirror_leech(client, message, isQbit=False, isLeech=False, sameDir=No
         elif reply_to.document and (file_.mime_type == 'application/x-bittorrent' or file_.file_name.endswith('.torrent')):
             link = await reply_to.download()
             file_ = None
+            bool_torrent = True
 
     if not is_url(link) and not is_magnet(link) and not await aiopath.exists(link) and not is_rclone_path(link) and file_ is None:
         btn = ButtonMaker()
@@ -368,12 +371,13 @@ async def _mirror_leech(client, message, isQbit=False, isLeech=False, sameDir=No
     elif isQbit and 'real-debrid' not in link:
         await add_qb_torrent(link, path, listener, ratio, seed_time)
     elif not is_telegram_link(link):
-        await sendMessage(message, 'Illegal Action!!!')
-        return
-        # if ussr or pssw:
-        #    auth = f"{ussr}:{pssw}"
-        #    headers += f" authorization: Basic {b64encode(auth.encode()).decode('ascii')}"
-        # await add_aria2c_download(link, path, listener, name, headers, ratio, seed_time)
+        if is_magnet(link) or bool_torrent:
+            await sendMessage(message, 'Illegal Action!!!')
+            return
+        if ussr or pssw:
+            auth = f"{ussr}:{pssw}"
+            headers += f" authorization: Basic {b64encode(auth.encode()).decode('ascii')}"
+        await add_aria2c_download(link, path, listener, name, headers, ratio, seed_time)
     await delete_links(message)
 
 
