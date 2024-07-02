@@ -354,6 +354,7 @@ def is_hidden_torrent(url):
     return bool("application/x-bittorrent" in (requests.get(url).headers['Content-Type']))
 
 def is_magnet(url):
+    print(url)
     return bool(re_match(MAGNET_REGEX, url) or re_match(TORRENT_REGEX, url) or is_hidden_torrent(url))
 
 def is_url(url):
