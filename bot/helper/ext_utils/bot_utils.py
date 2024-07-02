@@ -351,7 +351,7 @@ def get_readable_time(seconds):
     return result
 
 def is_hidden_torrent(url):
-    return bool(re_match(requests.get(url).json()['Content-Disposition'], TORRENT_REGEX))
+    return bool(re_match(requests.get(url).headers()['Content-Disposition'], TORRENT_REGEX))
 
 def is_magnet(url):
     return bool(re_match(MAGNET_REGEX, url) or re_match(TORRENT_REGEX, url) or is_hidden_torrent(url))
