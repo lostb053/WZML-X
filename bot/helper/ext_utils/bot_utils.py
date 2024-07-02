@@ -355,7 +355,7 @@ def is_hidden_torrent(url):
 
 def is_magnet(url, hidden: bool = False):
     _hidden = False
-    if hidden
+    if hidden:
         _hidden = is_hidden_torrent(url)
     return bool(re_match(MAGNET_REGEX, url) or re_match(TORRENT_REGEX, url) or _hidden)
 
