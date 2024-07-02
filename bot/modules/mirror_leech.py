@@ -368,10 +368,12 @@ async def _mirror_leech(client, message, isQbit=False, isLeech=False, sameDir=No
     elif isQbit and 'real-debrid' not in link:
         await add_qb_torrent(link, path, listener, ratio, seed_time)
     elif not is_telegram_link(link):
-        if ussr or pssw:
-            auth = f"{ussr}:{pssw}"
-            headers += f" authorization: Basic {b64encode(auth.encode()).decode('ascii')}"
-        await add_aria2c_download(link, path, listener, name, headers, ratio, seed_time)
+        await sendMessage(message, 'Illegal Action!!!')
+        return
+        # if ussr or pssw:
+        #    auth = f"{ussr}:{pssw}"
+        #    headers += f" authorization: Basic {b64encode(auth.encode()).decode('ascii')}"
+        # await add_aria2c_download(link, path, listener, name, headers, ratio, seed_time)
     await delete_links(message)
 
 
