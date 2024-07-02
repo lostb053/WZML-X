@@ -36,6 +36,7 @@ from bot.helper.ext_utils.shortners import short_url
 
 THREADPOOL   = ThreadPoolExecutor(max_workers=1000)
 MAGNET_REGEX = r'magnet:\?xt=urn:(btih|btmh):[a-zA-Z0-9]*\s*'
+TORRENT_REGEX = r'.+\.torrent\/*.*'
 URL_REGEX    = r'^(?!\/)(rtmps?:\/\/|mms:\/\/|rtsp:\/\/|https?:\/\/|ftp:\/\/)?([^\/:]+:[^\/@]+@)?(www\.)?(?=[^\/:\s]+\.[^\/:\s]+)([^\/:\s]+\.[^\/:\s]+)(:\d+)?(\/[^#\s]*[\s\S]*)?(\?[^#\s]*)?(#.*)?$'
 SIZE_UNITS   = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
 STATUS_START = 0
@@ -350,7 +351,7 @@ def get_readable_time(seconds):
 
 
 def is_magnet(url):
-    return bool(re_match(MAGNET_REGEX, url))
+    return bool(re_match(MAGNET_REGEX, url) or re_match(TORRENT_REGEX, url))
 
 
 def is_url(url):
