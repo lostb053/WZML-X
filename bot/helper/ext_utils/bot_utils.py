@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import platform
+import requests
 from base64 import b64encode
 from datetime import datetime
 from os import path as ospath
@@ -349,10 +350,11 @@ def get_readable_time(seconds):
             result += f'{int(period_value)}{period_name}'
     return result
 
+def is_hidden_torrent(url):
+    return bool(re_match(requests.get(url).json()['Content-Disposition'], TORRENT_REGEX))
 
 def is_magnet(url):
-    return bool(re_match(MAGNET_REGEX, url) or re_match(TORRENT_REGEX, url))
-
+    return bool(re_match(MAGNET_REGEX, url) or re_match(TORRENT_REGEX, url) or is_hidden_torrent(url))
 
 def is_url(url):
     return bool(re_match(URL_REGEX, url))
